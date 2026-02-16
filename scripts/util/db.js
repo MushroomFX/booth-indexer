@@ -6,6 +6,16 @@ console.log(dbFile)
 let indexDB = [];
 
 const db = {
+    backup: ()=>{
+        const timestamp = Date.now();
+        const backupFile = path.join(
+            path.dirname(dbFile),
+            `backup_${timestamp}_index.db`
+        );
+
+        fs.copyFileSync(dbFile, backupFile);
+        console.log(`Backup created: ${backupFile}`);
+    },
     load: async () => {
         try {
             const data = await fs.promises.readFile(dbFile, 'utf-8');

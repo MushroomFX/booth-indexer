@@ -3,10 +3,18 @@ const getPage = require("./scripts/getPages");
 const getItem = require("./scripts/getItem");
 const fs = require('fs');
 
-const firstItemEver = "item_213104";
+const config = {
+    pageSLeepFull: 15_000,
+    pageSLeepNew: 5_000
+}
+
+// const firstItemEver = "item_213104";
+const firstItemEver = "item_7982171";
+// let lastPage = ""
 
 // load db
 ;(async () => {
+    util.db.backup();
     await util.db.load();
     
     // some pages are still pending
@@ -14,7 +22,7 @@ const firstItemEver = "item_213104";
         let newItems = true
         let pageIndex = 1
         while(newItems){
-            const items = await getPage(1)
+            const items = await getPage(pageIndex)
             console.log(items,pageIndex)
             pageIndex++
             items.forEach((item)=>{
@@ -24,13 +32,16 @@ const firstItemEver = "item_213104";
                     util.db.update(item, { status: ['pending'] });
                 }
             })
-            await util.sleep(5000)
+            if(pageIndex % 10 == 0){
+                await util.db.write();
+            }
+            await util.sleep(config.pageSLeepFull)
         }
     } else {
         let newItems = true
         let pageIndex = 1
         while(newItems){
-            const items = await getPage(1)
+            const items = await getPage(pageIndex)
             newItems = false
             pageIndex++
             items.forEach((item)=>{
@@ -42,7 +53,7 @@ const firstItemEver = "item_213104";
                     newItems = false
                 }
             })
-            await util.sleep(5000)
+            await util.sleep(config.pageSLeepNew)
         }
         
     }
