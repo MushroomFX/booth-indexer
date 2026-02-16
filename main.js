@@ -8,9 +8,8 @@ const config = {
     pageSLeepNew: 5_000
 }
 
-// const firstItemEver = "item_213104";
-const firstItemEver = "item_7982171";
-// let lastPage = ""
+const firstItemEver = "item_213104";
+// const firstItemEver = "item_7982171";
 
 // load db
 ;(async () => {
