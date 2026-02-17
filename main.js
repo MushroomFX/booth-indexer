@@ -9,13 +9,12 @@ const config = {
 }
 
 const firstItemEver = "item_213104";
-// const firstItemEver = "item_7982171";
 
 // load db
 ;(async () => {
     util.db.backup();
     await util.db.load();
-    
+
     // some pages are still pending
     if(util.db.get(firstItemEver) == undefined){
         let newItems = true
@@ -27,9 +26,8 @@ const firstItemEver = "item_213104";
             items.forEach((item)=>{
                 if(item == firstItemEver){
                     newItems = false
-                } else {
-                    util.db.update(item, { status: ['pending'] });
                 }
+                util.db.update(item, { status: ['pending'] });
             })
             if(pageIndex % 10 == 0){
                 await util.db.write();
