@@ -2,7 +2,7 @@ const util = require("./util");
 const fs = require("fs");
 const path = require("path");
 
-async function getItem(id){
+async function getItem(id,full = false){
     try {
         const response = await fetch(`https://booth.pm/en/items/${id}`, {
             headers: {
@@ -16,15 +16,22 @@ async function getItem(id){
         }
 
         const result = await response.text();
-        const htmlJSON = util.nodeDOM.praseHTML(result);
-    
-    
-        const itemDir = path.join(__dirname, `../data/items/${id}`);
+        _writedata(result,full)
 
-        if (!fs.existsSync(itemDir)){
-            fs.mkdirSync(itemDir, {recursive: true});
-        }
+    } catch (error) {
+        console.error(error.message);
+        throw error;
+    }
+}
 
+async function _writedata(result,full){
+    const htmlJSON = util.nodeDOM.praseHTML(result);
+    const itemDir = path.join(__dirname, `../data/items/${id}`);
+
+    if (!fs.existsSync(itemDir)){
+        fs.mkdirSync(itemDir, {recursive: true});
+    }
+    if(full == true){
         await Promise.all([
             _saveIamges(htmlJSON,itemDir),
             _saveDetails(htmlJSON,itemDir),
@@ -32,10 +39,11 @@ async function getItem(id){
             _saveJSON(htmlJSON,itemDir),
             _saveHTML(result,itemDir)
         ]);
-
-    } catch (error) {
-        console.error(error.message);
-        throw error;
+    } else {
+        await Promise.all([
+            _saveJSON(htmlJSON,itemDir),
+            _saveHTML(result,itemDir)
+        ]);
     }
 }
 
