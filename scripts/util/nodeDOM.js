@@ -173,18 +173,15 @@ const nodeDOM = {
     querySelectorAll: (htmlJSON, selector) => {
         if (!selector) return [];
 
-        // ID
         if (selector.startsWith("#")) {
             const el = nodeDOM.getElementById(htmlJSON, selector.slice(1));
             return el ? [el] : [];
         }
 
-        // Class
         if (selector.startsWith(".")) {
             return nodeDOM.getElementsByClassName(htmlJSON, selector.slice(1));
         }
 
-        // Attribute selector [attr=value]
         if (selector.startsWith("[") && selector.endsWith("]")) {
             const results = [];
             const content = selector.slice(1, -1);
@@ -206,7 +203,6 @@ const nodeDOM = {
             return results;
         }
 
-        // Tag fallback
         return nodeDOM.getElementsByTagName(htmlJSON, selector);
     }
 };

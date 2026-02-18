@@ -1,12 +1,8 @@
 const util = require("./util");
 
-const url = (page) => {
-    return `https://booth.pm/en/items?adult=include&in_stock=true&page=${page}&sort=new&tags%5B%5D=VRChat`
-}
-
 async function getPage(page){
     try {
-        const response = await fetch(url(page), {
+        const response = await fetch(`https://booth.pm/en/items?adult=include&in_stock=true&page=${page}&sort=new&tags%5B%5D=VRChat`, {
             headers: {
                 "User-Agent": "Mozilla/5.0",
                 "Cookie": "adult=t"

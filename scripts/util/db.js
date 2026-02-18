@@ -5,6 +5,7 @@ const dbFile = path.join(__dirname, '../../data/index.db');
 console.log(dbFile)
 let indexDB = [];
 
+
 const db = {
     backup: ()=>{
         const timestamp = Date.now();
@@ -21,6 +22,7 @@ const db = {
             const data = await fs.promises.readFile(dbFile, 'utf-8');
             indexDB = JSON.parse(data);
             console.log('Database loaded:', indexDB.length, 'items');
+            Object.entries(indexDB.reduce((a, { id }) => (a[id] = (a[id] || 0) + 1, a), {})).filter(([_, c]) => c > 1).forEach(([id, c]) => console.log(id, "x", c));
         } catch (err) {
             if (err.code === 'ENOENT') {
                 indexDB = [];
