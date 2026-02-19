@@ -30,7 +30,7 @@ const firstItemEver = "item_213104";
                 if(item == firstItemEver){
                     newItems = false
                 }
-                util.db.update(item, { status: ['pending'] });
+                util.db.update(item, { status: 'pending' });
             })
             if(pageIndex % 10 == 0){
                 await util.db.write();
@@ -48,7 +48,7 @@ const firstItemEver = "item_213104";
             pageIndex++
             items.forEach((item)=>{
                 if(util.db.get(item) == undefined){
-                    util.db.update(item, { status: ['pending'] });
+                    util.db.update(item, { status: 'pending' });
                     newItems = true
                 }
                 if(item == firstItemEver){
