@@ -51,6 +51,7 @@ const firstItemEver = "item_213104";
                 if(util.db.get(item) == undefined){
                     const id = item.replaceAll("item_","")
                     getItem(id,full)
+                    
                     util.db.update(item, { status: 'pending' });
                     newItems = true
                 }

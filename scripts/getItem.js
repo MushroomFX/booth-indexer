@@ -16,7 +16,7 @@ async function getItem(id,full = false){
         }
 
         const result = await response.text();
-        _writedata(result,full)
+        _writedata(id,result,full)
 
     } catch (error) {
         console.error(error.message);
@@ -24,7 +24,7 @@ async function getItem(id,full = false){
     }
 }
 
-async function _writedata(result,full){
+async function _writedata(id,result,full){
     const htmlJSON = util.nodeDOM.praseHTML(result);
     const itemDir = path.join(__dirname, `../data/items/${id}`);
 
