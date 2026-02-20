@@ -28,6 +28,8 @@ async function _writedata(id,result,full){
     const htmlJSON = util.nodeDOM.praseHTML(result);
     const itemDir = path.join(__dirname, `../data/items/${id}`);
 
+    const item = `item_${id}`
+
     if (!fs.existsSync(itemDir)){
         fs.mkdirSync(itemDir, {recursive: true});
     }
@@ -38,12 +40,16 @@ async function _writedata(id,result,full){
             _savePrice(htmlJSON,itemDir),
             _saveJSON(htmlJSON,itemDir),
             _saveHTML(result,itemDir)
-        ]);
+        ]).then(()=>{
+            util.db.update(item, { status: 'fetched' });
+        });;
     } else {
         await Promise.all([
             _saveJSON(htmlJSON,itemDir),
             _saveHTML(result,itemDir)
-        ]);
+        ]).then(()=>{
+            util.db.update(item, { status: 'fetched' });
+        });
     }
 }
 
