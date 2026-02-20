@@ -4,6 +4,7 @@ const getItem = require("./scripts/getItem");
 const fs = require('fs');
 
 let status = ""
+const full = true
 
 const config = {
     pageSLeepFull: 15_000,
