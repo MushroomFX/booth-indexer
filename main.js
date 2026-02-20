@@ -48,6 +48,8 @@ const firstItemEver = "item_213104";
             pageIndex++
             items.forEach((item)=>{
                 if(util.db.get(item) == undefined){
+                    const id = item.replaceAll("item_","")
+                    getItem(id,full)
                     util.db.update(item, { status: 'pending' });
                     newItems = true
                 }

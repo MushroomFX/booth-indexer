@@ -6,6 +6,30 @@ console.log(dbFile)
 let indexDB = [];
 
 
+let writing = false;
+let pendingWrite = false;
+
+async function safeWrite() {
+    if (writing) {
+        pendingWrite = true;
+        return;
+    }
+    writing = true;
+
+    try {
+        await fs.promises.writeFile(dbFile, JSON.stringify(indexDB, null, 4), 'utf-8');
+        console.log('Database saved');
+    } catch (err) {
+        console.error('Failed to write database:', err);
+    } finally {
+        writing = false;
+        if (pendingWrite) {
+            pendingWrite = false;
+            safeWrite(); // run another write if queued
+        }
+    }
+}
+
 const db = {
     backup: ()=>{
         const timestamp = Date.now();
@@ -42,14 +66,7 @@ const db = {
         }
     },
 
-    write: async () => {
-        try {
-            await fs.promises.writeFile(dbFile, JSON.stringify(indexDB, null, 4), 'utf-8');
-            console.log('Database saved');
-        } catch (err) {
-            console.error('Failed to write database:', err);
-        }
-    },
+    write: safeWrite,
 
     get: (id) => indexDB.find(item => item.id === id),
 
